@@ -20,12 +20,11 @@ class Window(QWidget):
         self.setWindowTitle('Turn Simulator')
 
         self.graphicsView = QGraphicsView()
-        scene = QGraphicsScene(self.graphicsView)
-        scene.setSceneRect(0, 0, 500, 500)
-        self.graphicsView.setScene(scene)
+        self.scene = QGraphicsScene(self.graphicsView)
+        self.scene.setSceneRect(0, 0, 360, 360)
+        self.graphicsView.setScene(self.scene)
 
-
-        self.plot_button = QPushButton("start", self)
+        self.plot_button = QPushButton("plot", self)
         self.plot_button.setCheckable(True)
         self.plot_button.toggled.connect(self.slot_plot_button_toggled)
 
@@ -58,6 +57,7 @@ class Window(QWidget):
         self.combo.addItem("135")
         self.combo.addItem("180")
         self.combo.addItem("90(slanting)")
+        self.combo.activated[str].connect(self.slot_pattern_combo)
 
         layout2 = QHBoxLayout()
         layout2.addWidget(self.plot_button)
@@ -93,6 +93,13 @@ class Window(QWidget):
             pass
         except:
             pass
+
+    def slot_pattern_combo(self, pattern):
+        if pattern == "90(search)":
+            self.scene.clear()
+            self.scene.addItem(QGraphicsRectItem(50, 50, 100, 100))
+        else:
+            self.scene.clear()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
