@@ -95,9 +95,20 @@ class Window(QWidget):
             pass
 
     def slot_pattern_combo(self, pattern):
+        self.pattern = pattern
         if pattern == "90(search)":
             self.scene.clear()
             self.scene.addItem(QGraphicsRectItem(50, 50, 100, 100))
+        elif pattern == "45":
+            self.scene.clear()
+        elif pattern == "90(short)":
+            self.scene.clear()
+        elif pattern == "135":
+            self.scene.clear()
+        elif pattern == "180":
+            self.scene.clear()
+        elif pattern == "90(slanting)":
+            self.scene.clear()
         else:
             self.scene.clear()
 
