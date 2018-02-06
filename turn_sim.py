@@ -109,6 +109,7 @@ class Window(QWidget):
             self.scene.clear()
         elif pattern == "90(slanting)":
             self.scene.clear()
+            pass
         else:
             self.scene.clear()
 
