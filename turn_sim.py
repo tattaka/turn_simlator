@@ -99,7 +99,6 @@ class Window(QWidget):
         if pattern == "90(search)":
             self.scene.clear()
             self.scene.addItem(QGraphicsRectItem(50, 50, 100, 100))
-            test.test()
         elif pattern == "45":
             self.scene.clear()
         elif pattern == "90(short)":
