@@ -28,9 +28,6 @@ class Window(QWidget):
         self.plot_button.setCheckable(True)
         self.plot_button.toggled.connect(self.slot_plot_button_toggled)
 
-        self.reset_button = QPushButton("reset", self)
-        self.reset_button.clicked.connect(self.slot_reset_button_pushed)
-
         self.save_button = QPushButton("save", self)
         self.save_button.clicked.connect(self.slot_save_button_pushed)
 
@@ -61,7 +58,6 @@ class Window(QWidget):
 
         layout2 = QHBoxLayout()
         layout2.addWidget(self.plot_button)
-        layout2.addWidget(self.reset_button)
         layout2.addWidget(self.save_button)
 
         layout3 = QVBoxLayout()
@@ -81,12 +77,20 @@ class Window(QWidget):
 
     def slot_plot_button_toggled(self, checked):
         if checked:
-            pass
+            if self.pattern == "90(search)":
+                pass
+            elif self.pattern == "45":
+                pass
+            elif self.pattern == "90(short)":
+                pass
+            elif self.pattern == "135":
+                pass
+            elif self.pattern == "180":
+                pass
+            elif self.pattern == "90(slanting)":
+                pass
         else:
             pass
-
-    def slot_reset_button_pushed(self):
-        pass
 
     def slot_save_button_pushed(self):
         try:
