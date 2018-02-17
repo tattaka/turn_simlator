@@ -21,7 +21,7 @@ class Window(QWidget):
 
         self.graphicsView = QGraphicsView()
         self.scene = QGraphicsScene(self.graphicsView)
-        self.scene.setSceneRect(0, 0, 360, 360)
+        self.scene.setSceneRect(0, 0, 400, 400)
         self.graphicsView.setScene(self.scene)
 
         self.plot_button = QPushButton("plot", self)
@@ -98,7 +98,21 @@ class Window(QWidget):
         self.pattern = pattern
         if pattern == "90(search)":
             self.scene.clear()
-            self.scene.addItem(QGraphicsRectItem(50, 50, 100, 100))
+            self.scene.addItem(QGraphicsRectItem(50, 50, 150, 150))
+            self.scene.addItem(QGraphicsRectItem(200, 50, 150, 150))
+            self.scene.addItem(QGraphicsRectItem(50, 200, 150, 150))
+            centerLine1 = QGraphicsLineItem(125, 50, 125, 350)
+            centerLine1.setPen(QPen(Qt.black, 0.5, Qt.DashLine))
+            self.scene.addItem(centerLine1)
+            centerLine2 = QGraphicsLineItem(50, 125, 350, 125)
+            centerLine2.setPen(QPen(Qt.black, 0.5, Qt.DashLine))
+            self.scene.addItem(centerLine2)
+            centerLine3 = QGraphicsLineItem(275, 50, 275, 200)
+            centerLine3.setPen(QPen(Qt.black, 0.5, Qt.DashLine))
+            self.scene.addItem(centerLine3)
+            centerLine4 = QGraphicsLineItem(50, 275, 200, 275)
+            centerLine4.setPen(QPen(Qt.black, 0.5, Qt.DashLine))
+            self.scene.addItem(centerLine4)
         elif pattern == "45":
             self.scene.clear()
         elif pattern == "90(short)":
