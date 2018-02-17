@@ -78,9 +78,48 @@ class Window(QWidget):
     def slot_plot_button_toggled(self, checked):
         if checked:
             if self.pattern == "90(search)":
-                pass
+                arc = QGraphicsPathItem()
+                path = QPainterPath()
+                start_x = 125
+                start_y = 195
+                InnerLine = QGraphicsLineItem(start_x, 355, start_x, start_y)
+                InnerLine.setPen(QPen(Qt.blue, 3, Qt.SolidLine))
+                self.scene.addItem(InnerLine)
+                angle = 90
+                radius = 70
+                rad_x = start_x + radius
+                rad_y = start_y
+                end_x = start_x + radius + radius * np.sin(angle-90)
+                end_y = start_y - radius * np.cos(angle-90)
+                startAngle = -180
+                path.moveTo(start_x, start_y)
+                path.arcTo(rad_x-radius, rad_y-radius, radius*2, radius*2, startAngle, -angle)
+                arc.setPen(QPen(Qt.red, 3, Qt.SolidLine))
+                arc.setPath(path)
+                OuterLine = QGraphicsLineItem(end_x, end_y, 355, end_y)
+                OuterLine.setPen(QPen(Qt.blue, 3, Qt.SolidLine))
+                self.scene.addItem(OuterLine)
+                self.scene.addItem(arc)
             elif self.pattern == "45":
-                pass
+                arc = QGraphicsPathItem()
+                path = QPainterPath()
+                start_x = 125
+                start_y = 275
+                InnerLine = QGraphicsLineItem(start_x, 355, start_x, start_y)
+                InnerLine.setPen(QPen(Qt.blue, 3, Qt.SolidLine))
+                self.scene.addItem(InnerLine)
+                angle = 45
+                radius = 200
+                rad_x = start_x + radius
+                rad_y = start_y
+                end_x = start_x + radius + radius * np.sin(90-angle)
+                end_y = start_y + radius * np.cos(radius - angle)
+                startAngle = -180
+                path.moveTo(start_x, start_y)
+                path.arcTo(rad_x-radius, rad_y-radius, radius*2, radius*2, startAngle, -angle)
+                arc.setPen(QPen(Qt.red, 3, Qt.SolidLine))
+                arc.setPath(path)
+                self.scene.addItem(arc)
             elif self.pattern == "90(short)":
                 pass
             elif self.pattern == "135":
