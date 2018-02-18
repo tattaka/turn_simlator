@@ -31,20 +31,28 @@ class Window(QWidget):
         self.save_button = QPushButton("save", self)
         self.save_button.clicked.connect(self.slot_save_button_pushed)
 
-        validator = QIntValidator(0,100)
+        validator = QDoubleValidator(0, 100, 2)
         self.paramEdit1 = QLineEdit()
         self.paramEdit1.setValidator(validator)
         param1layout = QHBoxLayout()
-        param1layout.addWidget(QLabel("param1:"))
+        param1layout.addWidget(QLabel("inner offset:"))
         param1layout.addWidget(self.paramEdit1)
         param1layout.addWidget(QLabel("[mm]"))
 
         self.paramEdit2 = QLineEdit()
-        self.paramEdit1.setValidator(validator)
+        self.paramEdit2.setValidator(validator)
         param2layout = QHBoxLayout()
-        param2layout.addWidget(QLabel("param2:"))
+        param2layout.addWidget(QLabel("radius:"))
         param2layout.addWidget(self.paramEdit2)
         param2layout.addWidget(QLabel("[mm]"))
+
+        self.paramOutput1 = QLineEdit()
+        self.paramOutput1.setValidator(validator)
+        self.paramOutput1.setReadOnly(True)
+        param3layout = QHBoxLayout()
+        param3layout.addWidget(QLabel("outer:"))
+        param3layout.addWidget(self.paramOutput1)
+        param3layout.addWidget(QLabel("[mm]"))
 
         self.combo = QComboBox(self)
         self.combo.addItem("-- select --")
@@ -64,6 +72,7 @@ class Window(QWidget):
         layout3.addWidget(self.combo)
         layout3.addLayout(param1layout)
         layout3.addLayout(param2layout)
+        layout3.addLayout(param3layout)
 
         layout1 = QVBoxLayout()
         layout1.addWidget(self.graphicsView)
@@ -78,15 +87,22 @@ class Window(QWidget):
     def slot_plot_button_toggled(self, checked):
         if checked:
             if self.pattern == "90(search)":
+                self.maze_draw(self.pattern)
                 arc = QGraphicsPathItem()
                 path = QPainterPath()
                 start_x = 125
-                start_y = 195
+                if self.paramEdit1.text() == "":
+                    start_y = 200
+                else:
+                    start_y = 200 - float(self.paramEdit1.text())
                 InnerLine = QGraphicsLineItem(start_x, 355, start_x, start_y)
                 InnerLine.setPen(QPen(Qt.blue, 3, Qt.SolidLine))
                 self.scene.addItem(InnerLine)
                 angle = 90
-                radius = 70
+                if self.paramEdit2.text() == "":
+                    radius = 75
+                else:
+                    radius = float(self.paramEdit2.text())
                 rad_x = start_x + radius
                 rad_y = start_y
                 end_x = start_x + radius + radius * np.sin(angle-90)
@@ -98,9 +114,11 @@ class Window(QWidget):
                 arc.setPath(path)
                 OuterLine = QGraphicsLineItem(end_x, end_y, 355, end_y)
                 OuterLine.setPen(QPen(Qt.blue, 3, Qt.SolidLine))
+                self.paramOutput1.setText(str(end_x-200))
                 self.scene.addItem(OuterLine)
                 self.scene.addItem(arc)
             elif self.pattern == "45":
+                self.maze_draw(self.pattern)
                 arc = QGraphicsPathItem()
                 path = QPainterPath()
                 start_x = 125
@@ -121,13 +139,13 @@ class Window(QWidget):
                 arc.setPath(path)
                 self.scene.addItem(arc)
             elif self.pattern == "90(short)":
-                pass
+                self.maze_draw(self.pattern)
             elif self.pattern == "135":
-                pass
+                self.maze_draw(self.pattern)
             elif self.pattern == "180":
-                pass
+                self.maze_draw(self.pattern)
             elif self.pattern == "90(slanting)":
-                pass
+                self.maze_draw(self.pattern)
         else:
             pass
 
@@ -139,6 +157,8 @@ class Window(QWidget):
 
     def slot_pattern_combo(self, pattern):
         self.pattern = pattern
+        self.maze_draw(pattern)
+    def maze_draw(self, pattern):
         if pattern == "90(search)":
             self.scene.clear()
             centerLine1 = QGraphicsLineItem(125, 50, 125, 350)
