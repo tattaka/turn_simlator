@@ -185,10 +185,104 @@ class Window(QWidget):
                 self.scene.addItem(arc)
             elif self.pattern == "135":
                 self.maze_draw(self.pattern)
+                arc = QGraphicsPathItem()
+                path = QPainterPath()
+                start_x = 125
+                if self.paramEdit1.text() == "":
+                    start_y = 275
+                    self.paramEdit1.setText(str(0))
+                else:
+                    start_y = 275 - float(self.paramEdit1.text())/self.scale
+                InnerLine = QGraphicsLineItem(start_x, 350, start_x, start_y)
+                InnerLine.setPen(QPen(Qt.blue, 3, Qt.SolidLine))
+                self.scene.addItem(InnerLine)
+                angle = 135
+                if self.paramEdit2.text() == "":
+                    radius = 100
+                    self.paramEdit2.setText(str(radius*self.scale))
+                else:
+                    radius = float(self.paramEdit2.text())/self.scale
+                rad_x = start_x + radius
+                rad_y = start_y
+                end_x = start_x + radius - radius * np.cos(np.deg2rad(angle))
+                end_y = start_y - radius * np.sin(np.deg2rad(angle))
+                startAngle = -180
+                path.moveTo(start_x, start_y)
+                path.arcTo(rad_x-radius, rad_y-radius, radius*2, radius*2, startAngle, -angle)
+                arc.setPen(QPen(Qt.red, 3, Qt.SolidLine))
+                arc.setPath(path)
+                OuterLine = QGraphicsLineItem(end_x, end_y, 350, end_y+350-end_x)
+                OuterLine.setPen(QPen(Qt.blue, 3, Qt.SolidLine))
+                self.paramOutput1.setText(str(np.sqrt(2*(end_x-350)*(end_x-350))*self.scale))
+                self.scene.addItem(OuterLine)
+                self.scene.addItem(arc)
             elif self.pattern == "180":
                 self.maze_draw(self.pattern)
+                arc = QGraphicsPathItem()
+                path = QPainterPath()
+                start_x = 125
+                if self.paramEdit1.text() == "":
+                    start_y = 200
+                    self.paramEdit1.setText(str(0))
+                else:
+                    start_y = 200 - float(self.paramEdit1.text())/self.scale
+                InnerLine = QGraphicsLineItem(start_x, 350, start_x, start_y)
+                InnerLine.setPen(QPen(Qt.blue, 3, Qt.SolidLine))
+                self.scene.addItem(InnerLine)
+                angle = 180
+                if self.paramEdit2.text() == "":
+                    radius = 75
+                    self.paramEdit2.setText(str(radius*self.scale))
+                else:
+                    radius = float(self.paramEdit2.text())/self.scale
+                rad_x = start_x + radius
+                rad_y = start_y
+                end_x = start_x + radius - radius * np.cos(np.deg2rad(angle))
+                end_y = start_y - radius * np.sin(np.deg2rad(angle))
+                startAngle = -180
+                path.moveTo(start_x, start_y)
+                path.arcTo(rad_x-radius, rad_y-radius, radius*2, radius*2, startAngle, -angle)
+                arc.setPen(QPen(Qt.red, 3, Qt.SolidLine))
+                arc.setPath(path)
+                OuterLine = QGraphicsLineItem(end_x, end_y, end_x, 350)
+                OuterLine.setPen(QPen(Qt.blue, 3, Qt.SolidLine))
+                self.paramOutput1.setText(str((end_y-350)*self.scale))
+                self.scene.addItem(OuterLine)
+                self.scene.addItem(arc)
             elif self.pattern == "90(slanting)":
                 self.maze_draw(self.pattern)
+                arc = QGraphicsPathItem()
+                path = QPainterPath()
+                if self.paramEdit1.text() == "":
+                    start_x = 125
+                    start_y = 200
+                    self.paramEdit1.setText(str(0))
+                else:
+                    start_x = 125 + float(self.paramEdit1.text())/np.sqrt(2)/self.scale
+                    start_y = 200 - float(self.paramEdit1.text())/np.sqrt(2)/self.scale
+                InnerLine = QGraphicsLineItem(50, 275, start_x, start_y)
+                InnerLine.setPen(QPen(Qt.blue, 3, Qt.SolidLine))
+                self.scene.addItem(InnerLine)
+                angle = 90
+                if self.paramEdit2.text() == "":
+                    radius = 75
+                    self.paramEdit2.setText(str(radius*self.scale))
+                else:
+                    radius = float(self.paramEdit2.text())/self.scale
+                rad_x = start_x + radius/np.sqrt(2)
+                rad_y = start_y + radius/np.sqrt(2)
+                end_x = start_x + 2 * radius/np.sqrt(2)
+                end_y = start_y
+                startAngle = -225
+                path.moveTo(start_x, start_y)
+                path.arcTo(rad_x-radius, rad_y-radius, radius*2, radius*2, startAngle, -angle)
+                arc.setPen(QPen(Qt.red, 3, Qt.SolidLine))
+                arc.setPath(path)
+                OuterLine = QGraphicsLineItem(end_x, end_y, 350, end_y+350-end_x)
+                OuterLine.setPen(QPen(Qt.blue, 3, Qt.SolidLine))
+                self.paramOutput1.setText(str(np.sqrt(2*(end_x-350)*(end_x-350))*self.scale))
+                self.scene.addItem(OuterLine)
+                self.scene.addItem(arc)
         else:
             pass
 
