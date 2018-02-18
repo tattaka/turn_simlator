@@ -1,15 +1,12 @@
 import sys
 import os
 import re
-import csv
 
 import numpy as np
 
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-import pyqtgraph as pg
-from pyqtgraph import QtCore, QtGui
 
 class Window(QWidget):
     def __init__(self):
