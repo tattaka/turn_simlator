@@ -35,7 +35,7 @@ class Window(QWidget):
         self.paramEdit1 = QLineEdit()
         self.paramEdit1.setValidator(validator)
         param1layout = QHBoxLayout()
-        param1layout.addWidget(QLabel("inner offset:"))
+        param1layout.addWidget(QLabel("inner:"))
         param1layout.addWidget(self.paramEdit1)
         param1layout.addWidget(QLabel("[mm]"))
 
@@ -91,17 +91,15 @@ class Window(QWidget):
                 arc = QGraphicsPathItem()
                 path = QPainterPath()
                 start_x = 125
-                self.paramEdit1.clear()
                 if self.paramEdit1.text() == "":
                     start_y = 200
-                    self.paramEdit1.setText(str(0))
+                    self.paramEdit1.setText(str(350-start_y))
                 else:
-                    start_y = 200 - float(self.paramEdit1.text())
+                    start_y = 350 - float(self.paramEdit1.text())
                 InnerLine = QGraphicsLineItem(start_x, 350, start_x, start_y)
                 InnerLine.setPen(QPen(Qt.blue, 3, Qt.SolidLine))
                 self.scene.addItem(InnerLine)
                 angle = 90
-                self.paramEdit2.clear()
                 if self.paramEdit2.text() == "":
                     radius = 75
                     self.paramEdit2.setText(str(radius))
@@ -126,7 +124,6 @@ class Window(QWidget):
                 arc = QGraphicsPathItem()
                 path = QPainterPath()
                 start_x = 125
-                self.paramEdit1.clear()
                 if self.paramEdit1.text() == "":
                     start_y = 275
                     self.paramEdit1.setText(str(0))
@@ -136,7 +133,6 @@ class Window(QWidget):
                 InnerLine.setPen(QPen(Qt.blue, 3, Qt.SolidLine))
                 self.scene.addItem(InnerLine)
                 angle = 45
-                self.paramEdit2.clear()
                 if self.paramEdit2.text() == "":
                     radius = 200
                     self.paramEdit2.setText(str(radius))
@@ -161,7 +157,6 @@ class Window(QWidget):
                 arc = QGraphicsPathItem()
                 path = QPainterPath()
                 start_x = 125
-                self.paramEdit1.clear()
                 if self.paramEdit1.text() == "":
                     start_y = 275
                     self.paramEdit1.setText(str(0))
@@ -171,7 +166,6 @@ class Window(QWidget):
                 InnerLine.setPen(QPen(Qt.blue, 3, Qt.SolidLine))
                 self.scene.addItem(InnerLine)
                 angle = 90
-                self.paramEdit2.clear()
                 if self.paramEdit2.text() == "":
                     radius = 150
                     self.paramEdit2.setText(str(radius))
