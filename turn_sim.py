@@ -14,6 +14,7 @@ from pyqtgraph import QtCore, QtGui
 class Window(QWidget):
     def __init__(self):
         super().__init__()
+        self.scale = 1.2
         self.initUI()
 
     def initUI(self):
@@ -35,7 +36,7 @@ class Window(QWidget):
         self.paramEdit1 = QLineEdit()
         self.paramEdit1.setValidator(validator)
         param1layout = QHBoxLayout()
-        param1layout.addWidget(QLabel("inner:"))
+        param1layout.addWidget(QLabel("inner offset:"))
         param1layout.addWidget(self.paramEdit1)
         param1layout.addWidget(QLabel("[mm]"))
 
@@ -93,18 +94,18 @@ class Window(QWidget):
                 start_x = 125
                 if self.paramEdit1.text() == "":
                     start_y = 200
-                    self.paramEdit1.setText(str(350-start_y))
+                    self.paramEdit1.setText(str(0))
                 else:
-                    start_y = 350 - float(self.paramEdit1.text())
+                    start_y = 275 - float(self.paramEdit1.text())/self.scale
                 InnerLine = QGraphicsLineItem(start_x, 350, start_x, start_y)
                 InnerLine.setPen(QPen(Qt.blue, 3, Qt.SolidLine))
                 self.scene.addItem(InnerLine)
                 angle = 90
                 if self.paramEdit2.text() == "":
                     radius = 75
-                    self.paramEdit2.setText(str(radius))
+                    self.paramEdit2.setText(str(radius*self.scale))
                 else:
-                    radius = float(self.paramEdit2.text())
+                    radius = float(self.paramEdit2.text())/self.scale
                 rad_x = start_x + radius
                 rad_y = start_y
                 end_x = start_x + radius - radius * np.cos(np.deg2rad(angle))
@@ -116,7 +117,7 @@ class Window(QWidget):
                 arc.setPath(path)
                 OuterLine = QGraphicsLineItem(end_x, end_y, 355, end_y)
                 OuterLine.setPen(QPen(Qt.blue, 3, Qt.SolidLine))
-                self.paramOutput1.setText(str(end_x-200))
+                self.paramOutput1.setText(str((end_x-200)*self.scale))
                 self.scene.addItem(OuterLine)
                 self.scene.addItem(arc)
             elif self.pattern == "45":
@@ -128,16 +129,16 @@ class Window(QWidget):
                     start_y = 275
                     self.paramEdit1.setText(str(0))
                 else:
-                    start_y = 275 - float(self.paramEdit1.text())
+                    start_y = 275 - float(self.paramEdit1.text())/self.scale
                 InnerLine = QGraphicsLineItem(start_x, 350, start_x, start_y)
                 InnerLine.setPen(QPen(Qt.blue, 3, Qt.SolidLine))
                 self.scene.addItem(InnerLine)
                 angle = 45
                 if self.paramEdit2.text() == "":
                     radius = 200
-                    self.paramEdit2.setText(str(radius))
+                    self.paramEdit2.setText(str(radius*self.scale))
                 else:
-                    radius = float(self.paramEdit2.text())
+                    radius = float(self.paramEdit2.text())/self.scale
                 rad_x = start_x + radius
                 rad_y = start_y
                 end_x = start_x + radius - radius * np.cos(np.deg2rad(angle))
@@ -149,7 +150,7 @@ class Window(QWidget):
                 arc.setPath(path)
                 OuterLine = QGraphicsLineItem(end_x, end_y, end_x+end_y-50, 50)
                 OuterLine.setPen(QPen(Qt.blue, 3, Qt.SolidLine))
-                self.paramOutput1.setText(str(np.sqrt(2*(end_y-50)*(end_y-50))))
+                self.paramOutput1.setText(str(np.sqrt(2*(end_y-50)*(end_y-50))*self.scale))
                 self.scene.addItem(OuterLine)
                 self.scene.addItem(arc)
             elif self.pattern == "90(short)":
@@ -161,16 +162,16 @@ class Window(QWidget):
                     start_y = 275
                     self.paramEdit1.setText(str(0))
                 else:
-                    start_y = 275 - float(self.paramEdit1.text())
+                    start_y = 275 - float(self.paramEdit1.text())/self.scale
                 InnerLine = QGraphicsLineItem(start_x, 350, start_x, start_y)
                 InnerLine.setPen(QPen(Qt.blue, 3, Qt.SolidLine))
                 self.scene.addItem(InnerLine)
                 angle = 90
                 if self.paramEdit2.text() == "":
                     radius = 150
-                    self.paramEdit2.setText(str(radius))
+                    self.paramEdit2.setText(str(radius*self.scale))
                 else:
-                    radius = float(self.paramEdit2.text())
+                    radius = float(self.paramEdit2.text())/self.scale
                 rad_x = start_x + radius
                 rad_y = start_y
                 end_x = start_x + radius - radius * np.cos(np.deg2rad(angle))
@@ -182,7 +183,7 @@ class Window(QWidget):
                 arc.setPath(path)
                 OuterLine = QGraphicsLineItem(end_x, end_y, 355, end_y)
                 OuterLine.setPen(QPen(Qt.blue, 3, Qt.SolidLine))
-                self.paramOutput1.setText(str(end_x-200))
+                self.paramOutput1.setText(str((end_x-200)*self.scale))
                 self.scene.addItem(OuterLine)
                 self.scene.addItem(arc)
             elif self.pattern == "135":
