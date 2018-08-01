@@ -44,13 +44,20 @@ class Window(QWidget):
         param2layout.addWidget(self.paramEdit2)
         param2layout.addWidget(QLabel("[mm]"))
 
+        self.paramEdit3 = QLineEdit()
+        self.paramEdit3.setValidator(validator)
+        param3layout = QHBoxLayout()
+        param3layout.addWidget(QLabel("machine width:"))
+        param3layout.addWidget(self.paramEdit3)
+        param3layout.addWidget(QLabel("[mm]"))
+
         self.paramOutput1 = QLineEdit()
         self.paramOutput1.setValidator(validator)
         self.paramOutput1.setReadOnly(True)
-        param3layout = QHBoxLayout()
-        param3layout.addWidget(QLabel("outer:"))
-        param3layout.addWidget(self.paramOutput1)
-        param3layout.addWidget(QLabel("[mm]"))
+        param4layout = QHBoxLayout()
+        param4layout.addWidget(QLabel("outer:"))
+        param4layout.addWidget(self.paramOutput1)
+        param4layout.addWidget(QLabel("[mm]"))
 
         self.combo = QComboBox(self)
         self.combo.addItem("-- select --")
@@ -60,6 +67,7 @@ class Window(QWidget):
         self.combo.addItem("135")
         self.combo.addItem("180")
         self.combo.addItem("90(slanting)")
+        self.pattern = ""
         self.combo.activated[str].connect(self.slot_pattern_combo)
 
         layout2 = QHBoxLayout()
@@ -71,6 +79,7 @@ class Window(QWidget):
         layout3.addLayout(param1layout)
         layout3.addLayout(param2layout)
         layout3.addLayout(param3layout)
+        layout3.addLayout(param4layout)
 
         layout1 = QVBoxLayout()
         layout1.addWidget(self.graphicsView)
@@ -88,15 +97,35 @@ class Window(QWidget):
                 self.maze_draw(self.pattern)
                 arc = QGraphicsPathItem()
                 path = QPainterPath()
+                outerArc = QGraphicsPathItem()
+                outerPath = QPainterPath()
+                innerArc = QGraphicsPathItem()
+                innerPath = QPainterPath()
                 start_x = 125
                 if self.paramEdit1.text() == "":
                     start_y = 200
-                    self.paramEdit1.setText(str(0))
+                    self.paramEdit1.setText(str(90))
                 else:
                     start_y = 275 - float(self.paramEdit1.text())/self.scale
+
+                if self.paramEdit3.text() == "":
+                    machineWidth = 80/self.scale
+                    self.paramEdit3.setText(str(80))
+                else:
+                    machineWidth = float(self.paramEdit3.text())/self.scale
+
                 InnerLine = QGraphicsLineItem(start_x, 350, start_x, start_y)
                 InnerLine.setPen(QPen(Qt.blue, 3, Qt.SolidLine))
                 self.scene.addItem(InnerLine)
+
+                InnerMachineLineInner = QGraphicsLineItem(start_x-machineWidth/2, 350, start_x-machineWidth/2, start_y)
+                InnerMachineLineInner.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                self.scene.addItem(InnerMachineLineInner)
+
+                OuterMachineLineInner = QGraphicsLineItem(start_x+machineWidth/2, 350, start_x+machineWidth/2, start_y)
+                OuterMachineLineInner.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                self.scene.addItem(OuterMachineLineInner)
+
                 angle = 90
                 if self.paramEdit2.text() == "":
                     radius = 75
@@ -117,19 +146,58 @@ class Window(QWidget):
                 self.paramOutput1.setText(str((end_x-200)*self.scale))
                 self.scene.addItem(OuterLine)
                 self.scene.addItem(arc)
+
+                outerPath.moveTo(start_x-machineWidth/2, start_y)
+                outerPath.arcTo(rad_x-radius-machineWidth/2, rad_y-radius-machineWidth/2, radius*2+machineWidth, radius*2+machineWidth, startAngle, -angle)
+                outerArc.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                outerArc.setPath(outerPath)
+                self.scene.addItem(outerArc)
+
+                innerPath.moveTo(start_x+machineWidth/2, start_y)
+                innerPath.arcTo(rad_x-radius+machineWidth/2, rad_y-radius+machineWidth/2, radius*2-machineWidth, radius*2-machineWidth, startAngle, -angle)
+                innerArc.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                innerArc.setPath(innerPath)
+                self.scene.addItem(innerArc)
+
+                InnerMachineLineOuter = QGraphicsLineItem(end_x, end_y-machineWidth/2, 355, end_y-machineWidth/2)
+                InnerMachineLineOuter.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                self.scene.addItem(InnerMachineLineOuter)
+                OuterMachineLineOuter = QGraphicsLineItem(end_x, end_y+machineWidth/2, 355, end_y+machineWidth/2)
+                OuterMachineLineOuter.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                self.scene.addItem(OuterMachineLineOuter)
             elif self.pattern == "45":
                 self.maze_draw(self.pattern)
                 arc = QGraphicsPathItem()
                 path = QPainterPath()
+                outerArc = QGraphicsPathItem()
+                outerPath = QPainterPath()
+                innerArc = QGraphicsPathItem()
+                innerPath = QPainterPath()
                 start_x = 125
                 if self.paramEdit1.text() == "":
                     start_y = 275
-                    self.paramEdit1.setText(str(0))
+                    self.paramEdit1.setText(str(90))
                 else:
                     start_y = 275 - float(self.paramEdit1.text())/self.scale
+
+                if self.paramEdit3.text() == "":
+                    machineWidth = 80/self.scale
+                    self.paramEdit3.setText(str(80))
+                else:
+                    machineWidth = float(self.paramEdit3.text())/self.scale
+
                 InnerLine = QGraphicsLineItem(start_x, 350, start_x, start_y)
                 InnerLine.setPen(QPen(Qt.blue, 3, Qt.SolidLine))
                 self.scene.addItem(InnerLine)
+
+                InnerMachineLineInner = QGraphicsLineItem(start_x-machineWidth/2, 350, start_x-machineWidth/2, start_y)
+                InnerMachineLineInner.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                self.scene.addItem(InnerMachineLineInner)
+
+                OuterMachineLineInner = QGraphicsLineItem(start_x+machineWidth/2, 350, start_x+machineWidth/2, start_y)
+                OuterMachineLineInner.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                self.scene.addItem(OuterMachineLineInner)
+
                 angle = 45
                 if self.paramEdit2.text() == "":
                     radius = 200
@@ -150,19 +218,58 @@ class Window(QWidget):
                 self.paramOutput1.setText(str(np.sqrt(2*(end_y-50)*(end_y-50))*self.scale))
                 self.scene.addItem(OuterLine)
                 self.scene.addItem(arc)
+
+                outerPath.moveTo(start_x-machineWidth/2, start_y)
+                outerPath.arcTo(rad_x-radius-machineWidth/2, rad_y-radius-machineWidth/2, radius*2+machineWidth, radius*2+machineWidth, startAngle, -angle)
+                outerArc.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                outerArc.setPath(outerPath)
+                self.scene.addItem(outerArc)
+
+                innerPath.moveTo(start_x+machineWidth/2, start_y)
+                innerPath.arcTo(rad_x-radius+machineWidth/2, rad_y-radius+machineWidth/2, radius*2-machineWidth, radius*2-machineWidth, startAngle, -angle)
+                innerArc.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                innerArc.setPath(innerPath)
+                self.scene.addItem(innerArc)
+
+                InnerMachineLineOuter = QGraphicsLineItem(end_x-machineWidth/2*np.sqrt(2)/2, end_y-machineWidth/2*np.sqrt(2)/2, end_x+end_y-50-machineWidth/2*np.sqrt(2)/2, 50-machineWidth/2*np.sqrt(2)/2)
+                InnerMachineLineOuter.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                self.scene.addItem(InnerMachineLineOuter)
+                OuterMachineLineOuter = QGraphicsLineItem(end_x+machineWidth/2*np.sqrt(2)/2, end_y+machineWidth/2*np.sqrt(2)/2, end_x+end_y-50+machineWidth/2*np.sqrt(2)/2, 50+machineWidth/2*np.sqrt(2)/2)
+                OuterMachineLineOuter.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                self.scene.addItem(OuterMachineLineOuter)
             elif self.pattern == "90(short)":
                 self.maze_draw(self.pattern)
                 arc = QGraphicsPathItem()
                 path = QPainterPath()
+                outerArc = QGraphicsPathItem()
+                outerPath = QPainterPath()
+                innerArc = QGraphicsPathItem()
+                innerPath = QPainterPath()
                 start_x = 125
                 if self.paramEdit1.text() == "":
                     start_y = 275
-                    self.paramEdit1.setText(str(0))
+                    self.paramEdit1.setText(str(90))
                 else:
                     start_y = 275 - float(self.paramEdit1.text())/self.scale
+
+                if self.paramEdit3.text() == "":
+                    machineWidth = 80/self.scale
+                    self.paramEdit3.setText(str(80))
+                else:
+                    machineWidth = float(self.paramEdit3.text())/self.scale
+
                 InnerLine = QGraphicsLineItem(start_x, 350, start_x, start_y)
                 InnerLine.setPen(QPen(Qt.blue, 3, Qt.SolidLine))
                 self.scene.addItem(InnerLine)
+
+                InnerMachineLineInner = QGraphicsLineItem(start_x-machineWidth/2, 350, start_x-machineWidth/2, start_y)
+                InnerMachineLineInner.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                self.scene.addItem(InnerMachineLineInner)
+
+                OuterMachineLineInner = QGraphicsLineItem(start_x+machineWidth/2, 350, start_x+machineWidth/2, start_y)
+                OuterMachineLineInner.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                self.scene.addItem(OuterMachineLineInner)
+
                 angle = 90
                 if self.paramEdit2.text() == "":
                     radius = 150
@@ -183,19 +290,58 @@ class Window(QWidget):
                 self.paramOutput1.setText(str((end_x-200)*self.scale))
                 self.scene.addItem(OuterLine)
                 self.scene.addItem(arc)
+
+                outerPath.moveTo(start_x-machineWidth/2, start_y)
+                outerPath.arcTo(rad_x-radius-machineWidth/2, rad_y-radius-machineWidth/2, radius*2+machineWidth, radius*2+machineWidth, startAngle, -angle)
+                outerArc.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                outerArc.setPath(outerPath)
+                self.scene.addItem(outerArc)
+
+                innerPath.moveTo(start_x+machineWidth/2, start_y)
+                innerPath.arcTo(rad_x-radius+machineWidth/2, rad_y-radius+machineWidth/2, radius*2-machineWidth, radius*2-machineWidth, startAngle, -angle)
+                innerArc.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                innerArc.setPath(innerPath)
+                self.scene.addItem(innerArc)
+
+                InnerMachineLineOuter = QGraphicsLineItem(end_x, end_y-machineWidth/2, 355, end_y-machineWidth/2)
+                InnerMachineLineOuter.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                self.scene.addItem(InnerMachineLineOuter)
+                OuterMachineLineOuter = QGraphicsLineItem(end_x, end_y+machineWidth/2, 355, end_y+machineWidth/2)
+                OuterMachineLineOuter.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                self.scene.addItem(OuterMachineLineOuter)
             elif self.pattern == "135":
                 self.maze_draw(self.pattern)
                 arc = QGraphicsPathItem()
                 path = QPainterPath()
+                outerArc = QGraphicsPathItem()
+                outerPath = QPainterPath()
+                innerArc = QGraphicsPathItem()
+                innerPath = QPainterPath()
                 start_x = 125
                 if self.paramEdit1.text() == "":
                     start_y = 275
-                    self.paramEdit1.setText(str(0))
+                    self.paramEdit1.setText(str(90))
                 else:
                     start_y = 275 - float(self.paramEdit1.text())/self.scale
+
+                if self.paramEdit3.text() == "":
+                    machineWidth = 80/self.scale
+                    self.paramEdit3.setText(str(80))
+                else:
+                    machineWidth = float(self.paramEdit3.text())/self.scale
+
                 InnerLine = QGraphicsLineItem(start_x, 350, start_x, start_y)
                 InnerLine.setPen(QPen(Qt.blue, 3, Qt.SolidLine))
                 self.scene.addItem(InnerLine)
+
+                InnerMachineLineInner = QGraphicsLineItem(start_x-machineWidth/2, 350, start_x-machineWidth/2, start_y)
+                InnerMachineLineInner.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                self.scene.addItem(InnerMachineLineInner)
+
+                OuterMachineLineInner = QGraphicsLineItem(start_x+machineWidth/2, 350, start_x+machineWidth/2, start_y)
+                OuterMachineLineInner.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                self.scene.addItem(OuterMachineLineInner)
+
                 angle = 135
                 if self.paramEdit2.text() == "":
                     radius = 100
@@ -216,19 +362,58 @@ class Window(QWidget):
                 self.paramOutput1.setText(str(np.sqrt(2*(end_x-350)*(end_x-350))*self.scale))
                 self.scene.addItem(OuterLine)
                 self.scene.addItem(arc)
+
+                outerPath.moveTo(start_x-machineWidth/2, start_y)
+                outerPath.arcTo(rad_x-radius-machineWidth/2, rad_y-radius-machineWidth/2, radius*2+machineWidth, radius*2+machineWidth, startAngle, -angle)
+                outerArc.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                outerArc.setPath(outerPath)
+                self.scene.addItem(outerArc)
+
+                innerPath.moveTo(start_x+machineWidth/2, start_y)
+                innerPath.arcTo(rad_x-radius+machineWidth/2, rad_y-radius+machineWidth/2, radius*2-machineWidth, radius*2-machineWidth, startAngle, -angle)
+                innerArc.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                innerArc.setPath(innerPath)
+                self.scene.addItem(innerArc)
+
+                InnerMachineLineOuter = QGraphicsLineItem(end_x+machineWidth/2*np.sqrt(2)/2, end_y-machineWidth/2*np.sqrt(2)/2, 350, end_y+350-end_x-machineWidth/2*np.sqrt(2))
+                InnerMachineLineOuter.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                self.scene.addItem(InnerMachineLineOuter)
+                OuterMachineLineOuter = QGraphicsLineItem(end_x-machineWidth/2*np.sqrt(2)/2, end_y+machineWidth/2*np.sqrt(2)/2, 350, end_y+350-end_x+machineWidth/2*np.sqrt(2))
+                OuterMachineLineOuter.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                self.scene.addItem(OuterMachineLineOuter)
             elif self.pattern == "180":
                 self.maze_draw(self.pattern)
                 arc = QGraphicsPathItem()
                 path = QPainterPath()
+                outerArc = QGraphicsPathItem()
+                outerPath = QPainterPath()
+                innerArc = QGraphicsPathItem()
+                innerPath = QPainterPath()
                 start_x = 125
                 if self.paramEdit1.text() == "":
                     start_y = 200
-                    self.paramEdit1.setText(str(0))
+                    self.paramEdit1.setText(str(90))
                 else:
                     start_y = 200 - float(self.paramEdit1.text())/self.scale
+
+                if self.paramEdit3.text() == "":
+                    machineWidth = 80/self.scale
+                    self.paramEdit3.setText(str(80))
+                else:
+                    machineWidth = float(self.paramEdit3.text())/self.scale
+
                 InnerLine = QGraphicsLineItem(start_x, 350, start_x, start_y)
                 InnerLine.setPen(QPen(Qt.blue, 3, Qt.SolidLine))
                 self.scene.addItem(InnerLine)
+
+                InnerMachineLineInner = QGraphicsLineItem(start_x-machineWidth/2, 350, start_x-machineWidth/2, start_y)
+                InnerMachineLineInner.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                self.scene.addItem(InnerMachineLineInner)
+
+                OuterMachineLineInner = QGraphicsLineItem(start_x+machineWidth/2, 350, start_x+machineWidth/2, start_y)
+                OuterMachineLineInner.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                self.scene.addItem(OuterMachineLineInner)
+
                 angle = 180
                 if self.paramEdit2.text() == "":
                     radius = 75
@@ -249,20 +434,59 @@ class Window(QWidget):
                 self.paramOutput1.setText(str((end_y-350)*self.scale))
                 self.scene.addItem(OuterLine)
                 self.scene.addItem(arc)
+
+                outerPath.moveTo(start_x-machineWidth/2, start_y)
+                outerPath.arcTo(rad_x-radius-machineWidth/2, rad_y-radius-machineWidth/2, radius*2+machineWidth, radius*2+machineWidth, startAngle, -angle)
+                outerArc.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                outerArc.setPath(outerPath)
+                self.scene.addItem(outerArc)
+
+                innerPath.moveTo(start_x+machineWidth/2, start_y)
+                innerPath.arcTo(rad_x-radius+machineWidth/2, rad_y-radius+machineWidth/2, radius*2-machineWidth, radius*2-machineWidth, startAngle, -angle)
+                innerArc.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                innerArc.setPath(innerPath)
+                self.scene.addItem(innerArc)
+
+                InnerMachineLineOuter = QGraphicsLineItem(end_x-machineWidth/2, end_y, end_x-machineWidth/2, 350)
+                InnerMachineLineOuter.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                self.scene.addItem(InnerMachineLineOuter)
+                OuterMachineLineOuter = QGraphicsLineItem(end_x+machineWidth/2, end_y, end_x+machineWidth/2, 350)
+                OuterMachineLineOuter.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                self.scene.addItem(OuterMachineLineOuter)
             elif self.pattern == "90(slanting)":
                 self.maze_draw(self.pattern)
                 arc = QGraphicsPathItem()
                 path = QPainterPath()
+                outerArc = QGraphicsPathItem()
+                outerPath = QPainterPath()
+                innerArc = QGraphicsPathItem()
+                innerPath = QPainterPath()
                 if self.paramEdit1.text() == "":
                     start_x = 125
                     start_y = 200
-                    self.paramEdit1.setText(str(0))
+                    self.paramEdit1.setText(str(90))
                 else:
                     start_x = 125 + float(self.paramEdit1.text())/np.sqrt(2)/self.scale
                     start_y = 200 - float(self.paramEdit1.text())/np.sqrt(2)/self.scale
+
+                if self.paramEdit3.text() == "":
+                    machineWidth = 80/self.scale
+                    self.paramEdit3.setText(str(80))
+                else:
+                    machineWidth = float(self.paramEdit3.text())/self.scale
+
                 InnerLine = QGraphicsLineItem(50, 275, start_x, start_y)
                 InnerLine.setPen(QPen(Qt.blue, 3, Qt.SolidLine))
                 self.scene.addItem(InnerLine)
+
+                InnerMachineLineInner = QGraphicsLineItem(50-machineWidth/2*np.sqrt(2)/2, 275-machineWidth/2*np.sqrt(2)/2, start_x-machineWidth/2*np.sqrt(2)/2, start_y-machineWidth/2*np.sqrt(2)/2)
+                InnerMachineLineInner.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                self.scene.addItem(InnerMachineLineInner)
+
+                OuterMachineLineInner = QGraphicsLineItem(50+machineWidth/2*np.sqrt(2)/2, 275+machineWidth/2*np.sqrt(2)/2, start_x+machineWidth/2*np.sqrt(2)/2, start_y+machineWidth/2*np.sqrt(2)/2)
+                OuterMachineLineInner.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                self.scene.addItem(OuterMachineLineInner)
+
                 angle = 90
                 if self.paramEdit2.text() == "":
                     radius = 75
@@ -283,6 +507,28 @@ class Window(QWidget):
                 self.paramOutput1.setText(str(np.sqrt(2*(end_x-350)*(end_x-350))*self.scale))
                 self.scene.addItem(OuterLine)
                 self.scene.addItem(arc)
+
+                outerPath.moveTo(start_x-machineWidth/2*np.sqrt(2)/2, start_y-machineWidth/2*np.sqrt(2)/2)
+                outerPath.arcTo(rad_x-radius-machineWidth/2, rad_y-radius-machineWidth/2, radius*2+machineWidth, radius*2+machineWidth, startAngle, -angle)
+                outerArc.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                outerArc.setPath(outerPath)
+                self.scene.addItem(outerArc)
+
+                innerPath.moveTo(start_x+machineWidth/2*np.sqrt(2)/2, start_y+machineWidth/2*np.sqrt(2)/2)
+                innerPath.arcTo(rad_x-radius+machineWidth/2, rad_y-radius+machineWidth/2, radius*2-machineWidth, radius*2-machineWidth, startAngle, -angle)
+                innerArc.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                innerArc.setPath(innerPath)
+                self.scene.addItem(innerArc)
+
+                InnerMachineLineOuter = QGraphicsLineItem(end_x+machineWidth/4*(np.sqrt(2)), end_y-machineWidth/4*(np.sqrt(2)), 350+machineWidth/4*(np.sqrt(2)), end_y+350-end_x-machineWidth/4*(np.sqrt(2)))
+                InnerMachineLineOuter.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                self.scene.addItem(InnerMachineLineOuter)
+                OuterMachineLineOuter = QGraphicsLineItem(end_x-machineWidth/4*(np.sqrt(2)), end_y+machineWidth/4*(np.sqrt(2)), 350-machineWidth/4*(np.sqrt(2)), end_y+350-end_x+machineWidth/4*(np.sqrt(2)))
+                OuterMachineLineOuter.setPen(QPen(Qt.yellow, 3, Qt.SolidLine))
+                self.scene.addItem(OuterMachineLineOuter)
+
+            else:
+                pass
         else:
             pass
 
